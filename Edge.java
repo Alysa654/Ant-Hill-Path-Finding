@@ -10,5 +10,6 @@ public class Edge {
         edgeA = a;
         edgeB = b;
         amountOfAnts = 0;
+        distanceToAntHill = 1;
     }
 }
