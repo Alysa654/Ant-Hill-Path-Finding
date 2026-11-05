@@ -1,5 +1,6 @@
 public class Path {
-    Integer[] path;
+    Vertex[] path;
     Integer distance;
-    Integer totalAnts;
+
+    
 }
