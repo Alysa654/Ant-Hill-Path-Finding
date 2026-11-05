@@ -12,4 +12,17 @@ public class Vertex {
     public void addEdge(Edge newEdge){
         listOfEdges.add(newEdge);
     }
+
+    @Override 
+    public boolean equals(Object o){
+        if (o instanceof Vertex){
+            return ((Vertex)o).myIndex == this.myIndex;
+        }
+        if (o instanceof Integer){
+            return (Integer)o == this.myIndex;
+        }
+        return false;
+    }
+
+
 }
