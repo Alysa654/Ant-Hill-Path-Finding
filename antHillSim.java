@@ -8,5 +8,7 @@ public class antHillSim {
     {
         // creates a new graph currently hardcoded to 126 verticies
         Graph g = new Graph(126);
+
+        //finds all possible paths between a and b. 
     }
 }

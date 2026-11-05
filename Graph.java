@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Graph {
     Integer[] verticies;
     Integer[][] adjacencyMatrix;
+    
 
     //creates a graph
     public Graph(int numOfVerts){
@@ -30,6 +31,7 @@ public class Graph {
                 int edgeB = Integer.parseInt(tokenString);
                 // tokenString = edgeA + " " + edgeB;
                 adjacencyMatrix[edgeA-1][edgeB-1]=1;
+                
             }
             // Testing for reaching end of file.
             // System.out.println(tokenString);
