@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Graph {
@@ -17,7 +18,11 @@ public class Graph {
         listOfEdges.ensureCapacity(189);
 
         addEdges();
-        calculateDistanceToAntHill();
+        try {
+            calculateDistanceToAntHill();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //adds edges to a random graph. Currently Hardcoded to one graph with 126 verticies. 
@@ -69,70 +74,42 @@ public class Graph {
     }
 
     private void calculateDistanceToAntHill(){
-        ArrayList<Edge> copyListEdges = new ArrayList<Edge>();
+        LinkedList<Edge> edgeList = new LinkedList<Edge>();
+        LinkedList<Integer> prevIndexes = new LinkedList<Integer>();
+        ArrayList<Edge> foundEdges = new ArrayList<Edge>();
+        Vertex currVertex = verticies[1];
+        Vertex prevVertex = verticies[1];
 
-        //goes through the list once, updates the distanceToAntHill or adds to a list to updateLater
-        //Searches through each vertex to find shortest distance, then adds one to assign to itself
-        for(int i = 0; i<listOfEdges.size();i++){
-            if(listOfEdges.get(i).equals(1)){
-                listOfEdges.get(i).distanceToAntHill = 1;
-            }
-            else{
-                Edge e = listOfEdges.get(i);
-                int minDistance = Integer.MAX_VALUE;
-
-                //edge A
-                for(int j = 0; j<verticies[e.edgeA].listOfEdges.size();j++){
-
-                    if(verticies[e.edgeA].listOfEdges.get(j).distanceToAntHill!=-1 && verticies[e.edgeA].listOfEdges.get(j).distanceToAntHill<minDistance){
-                        minDistance = verticies[e.edgeA].listOfEdges.get(j).distanceToAntHill;
-                    }
-                }
-                //edge B
-                for(int j = 0; j<verticies[e.edgeB].listOfEdges.size();j++){
-                    if(verticies[e.edgeB].listOfEdges.get(j).distanceToAntHill!=-1 && verticies[e.edgeB].listOfEdges.get(j).distanceToAntHill<minDistance){
-                        minDistance = verticies[e.edgeB].listOfEdges.get(j).distanceToAntHill;
-                    }
-                }
-
-                if(minDistance != Integer.MAX_VALUE){
-                    e.distanceToAntHill = minDistance + 1;
-                }
-                else{
-                    // copyListEdges.add(e);
-                    copyListEdges.add(e);
-                }
-            }
+        for(Edge e: currVertex.listOfEdges){
+            edgeList.add(e);
+            prevIndexes.add(currVertex.myIndex);
         }
+        while (!edgeList.isEmpty()) {
+            Edge e = edgeList.removeFirst();
+            int prevIndex = prevIndexes.removeFirst();
+            foundEdges.add(e);
 
-        //Now to Update the edges we couldn't update earlier
-        int i = 0;
-        while (!copyListEdges.isEmpty() && i<1000) {
-            Edge e = copyListEdges.removeFirst();
-            int minDistance = Integer.MAX_VALUE;
-            i+=1;
-            //edge A
-            for(int j = 0; j<verticies[e.edgeA].listOfEdges.size();j++){
-                if(verticies[e.edgeA].listOfEdges.get(j).distanceToAntHill!=-1 && verticies[e.edgeA].listOfEdges.get(j).distanceToAntHill<minDistance){
-                    minDistance = verticies[e.edgeA].listOfEdges.get(j).distanceToAntHill;
-                }
-            }
-            //edge B
-            for(int j = 0; j<verticies[e.edgeB].listOfEdges.size();j++){
-                if(verticies[e.edgeB].listOfEdges.get(j).distanceToAntHill!=-1 && verticies[e.edgeB].listOfEdges.get(j).distanceToAntHill<minDistance){
-                    minDistance = verticies[e.edgeB].listOfEdges.get(j).distanceToAntHill;
-                }
-            }
-
-            if(minDistance != Integer.MAX_VALUE){
-                e.distanceToAntHill = minDistance + 1;
+            if(currVertex.myIndex == 1){
+                e.distanceToAntHill = 1;
             }
             else{
-                copyListEdges.add(10,e);
+                prevVertex = findVertex(prevIndex);
+                e.distanceToAntHill = prevVertex.getSmallestDistance()+1;
+            }
+            prevVertex = currVertex;
+            currVertex = findVertex(e.edgeB);
+            for(Edge e1: currVertex.listOfEdges){
+                if(!foundEdges.contains(e1)){
+                    edgeList.add(e1);
+                    prevIndexes.add(prevVertex.myIndex);
+                }
             }
         }
     }
 
+    public Vertex findVertex(int index){
+        return verticies[index];
+    }
 
     public void print(){
         for(Edge e : listOfEdges){
