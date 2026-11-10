@@ -24,5 +24,13 @@ public class Vertex {
         return false;
     }
 
-
+    public int getSmallestDistance(){
+        int smallestDistance = Integer.MAX_VALUE;
+        for (Edge e: listOfEdges){
+            if (e.distanceToAntHill < smallestDistance){
+                smallestDistance = e.distanceToAntHill;
+            }
+        }
+        return smallestDistance;
+    }
 }
