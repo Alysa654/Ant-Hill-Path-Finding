@@ -10,7 +10,7 @@ public class Edge {
         edgeA = a;
         edgeB = b;
         amountOfAnts = 0;
-        distanceToAntHill = -1;
+        distanceToAntHill = Integer.MAX_VALUE;
     }
 
     @Override 
@@ -29,6 +29,20 @@ public class Edge {
             return result1 || result2;
         }
         return false;
+    }
+
+    public int getSmallerVertex(){
+        if(edgeA < edgeB){
+            return edgeA;
+        }
+        return edgeB;
+    }
+
+    public int getOtherSide(int index){
+        if(edgeA == index){
+            return edgeB;
+        }
+        return edgeA;
     }
 
     // public boolean equals(Vertex vertex){
