@@ -1,5 +1,5 @@
 
-public class Edge {
+public class Edge implements Comparable<Edge>{
     Integer edgeA;
     Integer edgeB;
 
@@ -11,6 +11,11 @@ public class Edge {
         edgeB = b;
         amountOfAnts = 0;
         distanceToAntHill = Integer.MAX_VALUE;
+    }
+
+    @Override 
+    public String toString(){
+        return "Amount of Ants: "+amountOfAnts+" Dist to Hill: "+distanceToAntHill;
     }
 
     @Override 
@@ -29,6 +34,10 @@ public class Edge {
             return result1 || result2;
         }
         return false;
+    }
+
+    public int compareTo(Edge o){
+        return this.amountOfAnts - o.amountOfAnts;
     }
 
     public int getSmallerVertex(){
@@ -54,7 +63,7 @@ public class Edge {
     // }
 
     public void print(){
-        System.out.println(edgeA + " " + edgeB + " Distance To Ant Hill " + distanceToAntHill);
+        System.out.println(edgeA + " " + edgeB + " Distance To Ant Hill: " + distanceToAntHill + " Num of Ants: "+amountOfAnts);
     }
 
 }

@@ -8,6 +8,9 @@ public class Vertex {
         myIndex = index;
         listOfEdges = new ArrayList<Edge>();
     }
+    public void print(){
+        System.out.println(myIndex);
+    }
 
     public void addEdge(Edge newEdge){
         listOfEdges.add(newEdge);
