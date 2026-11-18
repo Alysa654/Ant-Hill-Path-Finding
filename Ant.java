@@ -1,14 +1,17 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Ant {
     Vertex currVertex;
     Vertex anthill;
+    LinkedList<Vertex> path;
+
 
     public Ant(Vertex anthill){
         currVertex = anthill;
         this.anthill = anthill;
+        path = new LinkedList<Vertex>();
     }
 
     public void print(){
@@ -21,10 +24,28 @@ public class Ant {
         findFood(v, seed, g);
     }
 
+    public void deletePath(){
+        if (!path.isEmpty()){
+            path.clear();
+        }
+    }
+
+    public void printPath(){
+        for(int i = 0; i<path.size(); i++){
+            Vertex v = path.get(i);
+            System.out.println("Step "+i+": Vertex "+v.getIndex());
+        }
+    }
+    public int getPathLength(){
+        // System.out.println("Path Length: " + path.size());
+        return  path.size();
+    }
+
     public void findFood(Vertex foodSource, int seed, Graph g){
         boolean lookForFood = true;
-        boolean goHome = false;
+        boolean goHome = true;
         Random r = new Random(seed);
+        LinkedList<Edge> linkedListOfEdges = new LinkedList<Edge>();
         // System.out.println("Finding Food.");
          /*
                 check if this vertex == foodsource
@@ -44,59 +65,32 @@ public class Ant {
             else{
                 // currVertex = g.findVertex(e.getOtherSide(currVertex.myIndex));
                 int size = currVertex.listOfEdges.size();
-                Edge[] listEdges = new Edge[size];
-
-                for(int j = 0; j<size;j++){
-                    listEdges[j] = currVertex.listOfEdges.get(j);
-                }
-                Integer[] amountAnts = new Integer[size];
-
-                Arrays.sort(listEdges);
-                
-                int amountOfAnts = 0;
-
-                
                 int indexForEdge = -1;
-                if(amountOfAnts==0){
-                    for(int j = 0; j<size;j++){
-                        amountOfAnts += listEdges[j].amountOfAnts+1;
-                        amountAnts[j] = listEdges[j].amountOfAnts+1;
-                    }
-                }
-                else{
-                    for(int j = 0; j<size;j++){
-                        amountOfAnts += listEdges[j].amountOfAnts;
-                        amountAnts[j] = listEdges[j].amountOfAnts;
-                    }
-                }
-                double num = r.nextDouble();
-                int totalAnts = 0;
-                for(int j = 0; j<size;j++){
-                    double sum = (double)(listEdges[j].amountOfAnts+totalAnts);
-                    sum = sum/amountOfAnts;
-                    if(num <= sum){
-                        indexForEdge = j;
-                    }
-                    else{
-                        totalAnts+=listEdges[j].amountOfAnts;
-                    }
-                }
+                
 
                 if(indexForEdge == -1){
                     indexForEdge = r.nextInt(size);
                 }
                 
-                Edge e = listEdges[indexForEdge];
+                Edge e = currVertex.listOfEdges.get(indexForEdge);
                 e.amountOfAnts +=1;
+                linkedListOfEdges.add(e);
+                // path.add(currVertex);
                 currVertex = g.findVertex(e.getOtherSide(currVertex.myIndex));
                 
             }
            i++;
         }
         // System.out.println("Look For Food Done");
+        if(i==1000){
+            for(Edge e : linkedListOfEdges){
+                e.amountOfAnts -=1;
+            }
+            goHome = false;
+        }
         i = 0;
-        currVertex.print();
-        System.out.println("Going Home.");
+        // currVertex.print();
+        // System.out.println("Going Home.");
         while (goHome && i<1000) {
             if (currVertex == anthill){
                 goHome = false;
@@ -122,6 +116,7 @@ public class Ant {
                     Edge e = minEdges.get(j);
                     index = index - e.amountOfAnts;
                     if(index <= 0 ){
+                        path.add(currVertex);
                         currVertex = g.findVertex(e.getOtherSide(currVertex.myIndex));
                         e.amountOfAnts+=1;
                         j=minEdges.size();
@@ -131,6 +126,11 @@ public class Ant {
             }
             i++;
         }
-        currVertex.print();
+        if(i==1000){
+            for(Edge e : linkedListOfEdges){
+                e.amountOfAnts -=1;
+            }
+        }
+        // currVertex.print();
     }
 }

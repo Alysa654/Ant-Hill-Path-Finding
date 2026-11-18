@@ -15,6 +15,9 @@ public class Vertex {
     public void addEdge(Edge newEdge){
         listOfEdges.add(newEdge);
     }
+    public int getIndex(){
+        return myIndex;
+    }
 
     @Override 
     public boolean equals(Object o){
