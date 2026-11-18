@@ -48,14 +48,14 @@ public class Ant {
         LinkedList<Edge> linkedListOfEdges = new LinkedList<Edge>();
         // System.out.println("Finding Food.");
          /*
-                check if this vertex == foodsource
-                if yes: 
-                    lookforfood = false
-                    goHome = true
-                if no: 
-                    pick random edge in list of edges and go to the other vertex
-                    add one to amount of ants on edge
-             */
+            check if this vertex == foodsource
+            if yes: 
+                lookforfood = false
+                goHome = true
+            if no: 
+                pick random edge in list of edges and go to the other vertex
+                add one to amount of ants on edge
+            */
             int i = 0;
         while (lookForFood && i < 1000) {
             if(currVertex == foodSource){
@@ -74,7 +74,7 @@ public class Ant {
                 
                 Edge e = currVertex.listOfEdges.get(indexForEdge);
                 e.amountOfAnts +=1;
-                linkedListOfEdges.add(e);
+                // linkedListOfEdges.add(e);
                 // path.add(currVertex);
                 currVertex = g.findVertex(e.getOtherSide(currVertex.myIndex));
                 
@@ -88,6 +88,7 @@ public class Ant {
             }
             goHome = false;
         }
+        linkedListOfEdges.clear();
         i = 0;
         // currVertex.print();
         // System.out.println("Going Home.");
